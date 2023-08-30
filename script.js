@@ -49,7 +49,7 @@ function populateTable(data, additionalData) {
     });
 
     const addRow = (rowData) => {
-        const row = table.insertRow(1);
+        const row = table.insertRow();
         rowData.forEach(item => {
             const cell = row.insertCell();
             cell.textContent = item.value;
@@ -59,6 +59,15 @@ function populateTable(data, additionalData) {
         });
     };
 
+    // Add row for additional data
+    addRow([
+        { value: 'Dólar Oficial' },
+        { value: additionalData.compra },
+        { value: additionalData.venta },
+        { value: additionalData.fecha },
+        { value: additionalData.variacion, className: getVariationClass(additionalData.variacion) }
+    ]);
+    
     // Populate the table with data
     data.forEach(item => {
         addRow([
@@ -69,15 +78,6 @@ function populateTable(data, additionalData) {
             { value: item.variacion, className: getVariationClass(item.variacion) }
         ]);
     });
-
-    // Add row for additional data
-    addRow([
-        { value: 'Dólar Oficial' },
-        { value: additionalData.compra },
-        { value: additionalData.venta },
-        { value: additionalData.fecha },
-        { value: additionalData.variacion, className: getVariationClass(additionalData.variacion) }
-    ]);
 }
 
 // Determine variation class based on value
