@@ -1,59 +1,23 @@
+/* styles.css */
+
 body {
-    font-family: Arial, sans-serif;
-}
-h1, h2, h3 {
-    text-align: center;
-}
-#data-table {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-}
-#data-table th, #data-table td {
-    padding: 10px;
-    text-align: left;
-}
-#data-table td.header {
-    background-color: lightblue;
-    font-weight: bold;
-}
-#data-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-#data-table tr:hover {
-    background-color: #ddd;
-}
-@media (max-width: 768px) {
-    #data-table {
-        width: 100%; /* Full width on small screens */
-        font-size: 14px; /* Adjust font size for readability */
-    }
-}
-/* Additional styles for loading and error messages */
-#loading-message, #error-message {
-    text-align: center;
-    margin: 10px;
-    display: none;
-    font-weight: bold;
-    color: #ff0000;
-}
-/* Red text for negative values */
-.negative {
-    color: red;
+    background-color: black; /* Set the background color to black */
+    color: lightgray; /* Set the text color to light gray */
 }
 
-/* Blue text for positive values */
-.positive {
-    color: limegreen;
+table {
+    border-collapse: collapse;
+    width: 100%;
+    color: inherit; /* Inherit the text color from the body */
 }
-/* button {
-    display: block;
-    margin: 0 auto;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-} */
+
+th, td {
+    border: 1px solid gray; /* Change border color to gray */
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: darkslateblue; /* Darken the header background color */
+    font-weight: bold; /* Make the header text bold */
+}

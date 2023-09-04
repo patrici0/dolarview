@@ -1,18 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8"></meta>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dolar hoy</title>
+    <!-- Link to the external CSS file -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h2>Dolar hoy</h2>
     <h3>(Datos de Ámbito Financiero)</h3>
-    <!-- Loading and error messages -->
-    <div id="loading-message">Loading...</div>
-    <div id="error-message"></div>
-    <table id="data-table"></table>
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Compra</th>
+                <th>Venta</th>
+                <th>Fecha</th>
+                <th>Variación</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+
+    <!-- Link to the external JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>

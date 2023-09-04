@@ -1,97 +1,61 @@
-// Function to fetch data from the API
-function fetchDataAndPopulateTable() {
-    const loadingMessage = document.getElementById('loading-message');
-    loadingMessage.style.display = 'block';
+// script.js
 
-    fetch('https://mercados.ambito.com/mercados/monedas')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        const additionalDataPromise = fetch('https://mercados.ambito.com/dolar/oficial/variacion')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            });
+// Define an array of key-value pairs for the APIs
+const apiUrls = [
+    { key: 'Oficial', value: 'https://mercados.ambito.com/dolar/oficial/variacion' },
+    { key: 'Blue', value: 'https://mercados.ambito.com/dolar/informal/variacion' },
+    { key: 'MEP', value: 'https://mercados.ambito.com/dolarrava/mep/variacion' },
+    { key: 'CCL', value: 'https://mercados.ambito.com/dolarrava/cl/variacion' },
+    { key: 'Cripto', value: 'https://mercados.ambito.com/dolarcripto/variacion' },
+    { key: 'Turista', value: 'https://mercados.ambito.com/dolarturista/variacion' },
+    { key: 'Qatar', value: 'https://mercados.ambito.com/dolarqatar/variacion' },
+    { key: 'Lujo', value: 'https://mercados.ambito.com/dolardelujo/variacion' }
+];
 
-        return Promise.all([Promise.resolve(data), additionalDataPromise]);
-    })
-    .then(([data, additionalData]) => {
-        populateTable(data, additionalData);
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error);
-        const errorMessage = document.getElementById('error-message');
-        errorMessage.textContent = 'An error occurred while fetching data. Please try again later.';
-    })
-    .finally(() => {
-        loadingMessage.style.display = 'none';
-    });
-}
+// Function to fetch data from an API and populate the table
+async function fetchDataAndPopulateTable(apiInfo) {
+    try {
+        const response = await fetch(apiInfo.value);
+        const data = await response.json();
 
-// Function to populate the table with data
-function populateTable(data, additionalData) {
-    const table = document.getElementById('data-table');
-    table.innerHTML = '';
+        // Assuming the API returns an object with the desired keys
+        const { compra, venta, fecha, variacion } = data;
 
-    const headerRow = table.insertRow();
-    const headers = ['Tipo', 'Valor Compra', 'Valor Venta', 'Fecha', 'Variación'];
+        const tableBody = document.getElementById('table-body');
+        const row = tableBody.insertRow();
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+        const cell4 = row.insertCell(3);
+        const cell5 = row.insertCell(4);
 
-    headers.forEach(headerText => {
-        const headerCell = headerRow.insertCell();
-        headerCell.textContent = headerText;
-        headerCell.className = 'header'; // Apply the header class
-    });
+        cell1.textContent = apiInfo.key;
+        cell2.textContent = (apiInfo.key == 'Oficial' || apiInfo.key == 'Blue' || apiInfo.key == 'Cripto') ? compra : '---';
+        cell3.textContent = venta;
+        cell4.textContent = fecha;
 
-    const addRow = (rowData) => {
-        const row = table.insertRow();
-        rowData.forEach(item => {
-            const cell = row.insertCell();
-            cell.textContent = item.value;
-            if (item.className) {
-                cell.classList.add(item.className);
-            }
-        });
-    };
-
-    // Add row for additional data
-    addRow([
-        { value: 'Dólar Oficial' },
-        { value: additionalData.compra },
-        { value: additionalData.venta },
-        { value: additionalData.fecha },
-        { value: additionalData.variacion, className: getVariationClass(additionalData.variacion) }
-    ]);
-    
-    // Populate the table with data
-    data.forEach(item => {
-        addRow([
-            { value: item.nombre },
-            { value: item.compra },
-            { value: item.venta },
-            { value: item.fecha },
-            { value: item.variacion, className: getVariationClass(item.variacion) }
-        ]);
-    });
-}
-
-// Determine variation class based on value
-function getVariationClass(variation) {
-    if (variation.startsWith('-')) {
-        return 'negative';
-    } else if (!isNaN(parseFloat(variation))) {
-        return 'positive';
+        // Set the text color based on the "Variación" value
+        cell5.textContent = variacion;
+        cell5.style.color = variacion.startsWith('-') ? 'red' : 'lightgreen';
+    } catch (error) {
+        console.error(`Error fetching data from API ${apiInfo.key}: ${error.message}`);
     }
-    return '';
 }
 
-// Fetch data on page load
-window.onload = function() {
-    fetchDataAndPopulateTable();
-    setInterval(fetchDataAndPopulateTable, 60000 * 15); // 60000 milliseconds = 1 minute
-};
+// Function to fetch data from all APIs and populate the table
+function fetchDataAndPopulateAll() {
+    // Clear existing table rows
+    const tableBody = document.getElementById('table-body');
+    tableBody.innerHTML = '';
+
+    // Fetch data from each API and populate the table
+    apiUrls.forEach(apiInfo => {
+        fetchDataAndPopulateTable(apiInfo);
+    });
+}
+
+// Call the fetchDataAndPopulateAll function when the page loads
+document.addEventListener('DOMContentLoaded', fetchDataAndPopulateAll);
+
+// Refresh the data every 15 minutes (900000 milliseconds)
+setInterval(fetchDataAndPopulateAll, 900000);
