@@ -1,23 +1,46 @@
 /* styles.css */
 
 body {
-    background-color: black; /* Set the background color to black */
-    color: lightgray; /* Set the text color to light gray */
+    background-color: black;
+    color: lightgray;
+    font-family: Arial, sans-serif; /* Set a preferred font family */
+    margin: 0; /* Remove default margin to limit body width */
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px; /* Limit the container width */
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 20px; /* Add some padding to the container */
+    text-align: center;
 }
 
 table {
     border-collapse: collapse;
-    width: 100%;
-    color: inherit; /* Inherit the text color from the body */
+    width: 80%;
+    color: inherit;
+    margin-top: 20px; /* Add space above the table */
+    margin: 0 auto;
 }
 
 th, td {
-    border: 1px solid gray; /* Change border color to gray */
-    padding: 8px;
-    text-align: left;
+    border: 1px solid gray;
+    padding: 12px; /* Increase cell padding for better readability */
+    text-align: center; /* Center align table content */
+    text-align: center;
 }
 
 th {
-    background-color: darkslateblue; /* Darken the header background color */
-    font-weight: bold; /* Make the header text bold */
+    background-color: darkslateblue;
+    font-weight: bold;
+    color: white; /* White text for header cells */
+}
+
+tr:nth-child(even) {
+    background-color: rgb(63, 63, 63); /* Alternate row background color */
+}
+
+/* Add a hover effect to table rows for better interactivity */
+tr:hover {
+    background-color: #ddd;
 }
