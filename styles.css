@@ -42,5 +42,5 @@ tr:nth-child(even) {
 
 /* Add a hover effect to table rows for better interactivity */
 tr:hover {
-    background-color: #ddd;
+    background-color: grey;
 }
