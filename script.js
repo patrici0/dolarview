@@ -7,7 +7,7 @@ const apiUrls = [
     { key: 'MEP', value: 'https://mercados.ambito.com/dolarrava/mep/variacion' },
     { key: 'CCL', value: 'https://mercados.ambito.com/dolarrava/cl/variacion' },
     { key: 'Cripto', value: 'https://mercados.ambito.com/dolarcripto/variacion' },
-    { key: 'Turista', value: 'https://mercados.ambito.com/dolarturista/variacion' },
+    { key: 'Tarjeta', value: 'https://mercados.ambito.com/dolarturista/variacion' },
     { key: 'Qatar', value: 'https://mercados.ambito.com/dolarqatar/variacion' },
     { key: 'Lujo', value: 'https://mercados.ambito.com/dolardelujo/variacion' }
 ];
@@ -42,16 +42,22 @@ async function fetchDataAndPopulateTable(apiInfo) {
     }
 }
 
-// Function to fetch data from all APIs and populate the table
-function fetchDataAndPopulateAll() {
+// Function to fetch data from all APIs and populate the table in a specific order
+async function fetchDataAndPopulateAll() {
+    // Define the specific order in which you want to display the APIs
+    const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Qatar', 'Lujo'];
+
     // Clear existing table rows
     const tableBody = document.getElementById('table-body');
     tableBody.innerHTML = '';
 
-    // Fetch data from each API and populate the table
-    apiUrls.forEach(apiInfo => {
-        fetchDataAndPopulateTable(apiInfo);
-    });
+    // Fetch data from each API in the desired order and populate the table
+    for (const apiKey of desiredOrder) {
+        const apiInfo = apiUrls.find(api => api.key === apiKey);
+        if (apiInfo) {
+            await fetchDataAndPopulateTable(apiInfo);
+        }
+    }
 }
 
 // Call the fetchDataAndPopulateAll function when the page loads
