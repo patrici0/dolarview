@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Dolar hoy (Ambito Financiero)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        #data-table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+        }
+        #data-table th, #data-table td {
+            padding: 10px;
+            text-align: left;
+        }
+        #data-table td.header {
+            background-color: #7ecda1;
+            font-weight: bold;
+        }
+        #data-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        #data-table tr:hover {
+            background-color: #ddd;
+        }
+        /* button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        } */
+    </style>
+    <script>
+        // Function to fetch data from the API
+        function fetchData() {
+            fetch('https://mercados.ambito.com/mercados/monedas') // Replace with your API URL
+            .then(response => response.json())
+            .then(data => {
+                populateTable(data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+        }
+
+        // Function to populate the table with fetched data
+        function populateTable(data) {
+            const table = document.getElementById('data-table');
+            
+            // Clear existing table rows
+            table.innerHTML = '';
+            
+            // Create the header row
+            const headerRow = table.insertRow();
+            const headerCell1 = headerRow.insertCell(0);
+            const headerCell2 = headerRow.insertCell(1);
+            const headerCell3 = headerRow.insertCell(2);
+            const headerCell4 = headerRow.insertCell(3);
+            const headerCell5 = headerRow.insertCell(4);
+            headerCell1.textContent = 'Tipo';
+            headerCell2.textContent = 'Valor Compra';
+            headerCell3.textContent = 'Valor Venta';
+            headerCell4.textContent = 'Fecha';
+            headerCell5.textContent = "Variación";
+            headerCell1.className = 'header'; // Apply the header class
+            headerCell2.className = 'header'; // Apply the header class
+            headerCell3.className = 'header'; // Apply the header class
+            headerCell4.className = 'header'; // Apply the header class
+            headerCell5.className = 'header'; // Apply the header class
+
+            // Populate the table with data
+            data.forEach(item => {
+                const row = table.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                const cell4 = row.insertCell(3);
+                const cell5 = row.insertCell(4);
+
+                cell1.textContent = item.nombre; // Replace with your data properties
+                cell2.textContent = item.compra; // Replace with your data properties
+                cell3.textContent = item.venta; // Replace with your data properties
+                cell4.textContent = item.fecha; // Replace with your data properties
+                cell5.textContent = item.variacion; // Replace with your data properties
+            });
+        }
+
+        // Fetch data on page load
+        window.onload = function() {
+            fetchData();
+            setInterval(fetchData, 60000); // 60000 milliseconds = 1 minute
+        };
+    </script>
+</head>
+<body>
+    <h1>Dolar hoy (Ambito Financiero)</h1>
+    <table id="data-table"></table>
+</body>
+</html>
