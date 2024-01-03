@@ -30,7 +30,8 @@ async function fetchDataAndPopulateTable(apiInfo) {
         const cell5 = row.insertCell(4);
 
         cell1.textContent = apiInfo.key;
-        cell2.textContent = (apiInfo.key == 'Tarjeta' || apiInfo.key == 'Qatar' || apiInfo.key == 'Lujo') ? '---' : compra;
+        // cell2.textContent = (apiInfo.key == 'Tarjeta' || apiInfo.key == 'Qatar' || apiInfo.key == 'Lujo') ? '---' : compra;
+        cell2.textContent = (apiInfo.key == 'Tarjeta') ? '---' : compra;
         cell3.textContent = venta;
         cell4.textContent = fecha;
 
@@ -46,7 +47,7 @@ async function fetchDataAndPopulateTable(apiInfo) {
 async function fetchDataAndPopulateAll() {
     // Define the specific order in which you want to display the APIs
     // const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Qatar', 'Lujo'];
-    const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta'];
+    const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Ahorro'];
 
     // Clear existing table rows
     const tableBody = document.getElementById('table-body');
