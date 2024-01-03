@@ -45,7 +45,8 @@ async function fetchDataAndPopulateTable(apiInfo) {
 // Function to fetch data from all APIs and populate the table in a specific order
 async function fetchDataAndPopulateAll() {
     // Define the specific order in which you want to display the APIs
-    const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Qatar', 'Lujo'];
+    // const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Qatar', 'Lujo'];
+    const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta'];
 
     // Clear existing table rows
     const tableBody = document.getElementById('table-body');
