@@ -9,7 +9,8 @@ const apiUrls = [
     { key: 'Cripto', value: 'https://mercados.ambito.com/dolarcripto/variacion' },
     { key: 'Tarjeta', value: 'https://mercados.ambito.com/dolarturista/variacion' },
     { key: 'Qatar', value: 'https://mercados.ambito.com/dolarqatar/variacion' },
-    { key: 'Lujo', value: 'https://mercados.ambito.com/dolardelujo/variacion' }
+    { key: 'Lujo', value: 'https://mercados.ambito.com/dolardelujo/variacion' },
+    { key: 'Euro Blue', value: 'https://mercados.ambito.com/euro/informal/variacion' },
 ];
 
 // Function to fetch data from an API and populate the table
@@ -47,7 +48,7 @@ async function fetchDataAndPopulateTable(apiInfo) {
 async function fetchDataAndPopulateAll() {
     // Define the specific order in which you want to display the APIs
     // const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Qatar', 'Lujo'];
-    const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Ahorro'];
+    const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Euro Blue'];
 
     // Clear existing table rows
     const tableBody = document.getElementById('table-body');
