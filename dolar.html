@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.9">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://mercados.ambito.com; style-src 'self'; script-src 'self'; img-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests">
+    <meta name="referrer" content="no-referrer">
     <title>Dolar hoy</title>
     <!-- Link to the external CSS file -->
     <link rel="stylesheet" href="styles.css">
@@ -10,6 +12,7 @@
 <body>
     <h2>Dolar hoy</h2>
     <h3>(Datos de Ámbito Financiero)</h3>
+    <p id="status-message" role="status" aria-live="polite"></p>
     <table>
         <thead>
             <tr>

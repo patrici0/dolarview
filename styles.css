@@ -8,6 +8,16 @@ body {
     text-align: center;
 }
 
+.status-message {
+    min-height: 1.5rem;
+    margin: 1rem 0;
+    color: lightgray;
+}
+
+.status-message.error {
+    color: #ff9b9b;
+}
+
 .container {
     max-width: 1200px; /* Limit the container width */
     margin: 0 auto; /* Center the container horizontally */
@@ -43,4 +53,12 @@ tr:nth-child(even) {
 /* Add a hover effect to table rows for better interactivity */
 tr:hover {
     background-color: grey;
+}
+
+.row-error {
+    color: #ff9b9b;
+}
+
+.error-cell {
+    font-style: italic;
 }
