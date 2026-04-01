@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Basic document-level hardening that still works in a static-only deployment. -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://mercados.ambito.com; style-src 'self'; script-src 'self'; img-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'; upgrade-insecure-requests">
     <meta name="referrer" content="no-referrer">
     <title>Dolar hoy</title>
@@ -12,6 +13,7 @@
 <body>
     <h2>Dolar hoy</h2>
     <h3>(Datos de Ámbito Financiero)</h3>
+    <!-- Live status text for refresh progress and partial/total fetch failures. -->
     <p id="status-message" role="status" aria-live="polite"></p>
     <table>
         <thead>

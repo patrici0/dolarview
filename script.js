@@ -1,6 +1,6 @@
 // script.js
 
-// Define an array of key-value pairs for the APIs
+// Upstream data sources keyed by the row label shown in the table.
 const apiUrls = [
     { key: 'Oficial', value: 'https://mercados.ambito.com/dolar/oficial/variacion' },
     { key: 'Nacion', value: 'https://mercados.ambito.com/dolarnacion/variacion' },
@@ -15,10 +15,12 @@ const apiUrls = [
     { key: 'Euro Blue', value: 'https://mercados.ambito.com/euro/informal/variacion' },
 ];
 
+// Keep requests responsive and avoid overlapping refresh cycles.
 const FETCH_TIMEOUT_MS = 10000;
 const TABLE_HEADERS_COUNT = 5;
 let refreshInProgress = false;
 
+// Update the accessible status area without mixing status text into the table itself.
 function setStatusMessage(message, isError = false) {
     const statusMessage = document.getElementById('status-message');
     statusMessage.textContent = message;
@@ -35,6 +37,7 @@ function createCell(row, text, className = '') {
     return cell;
 }
 
+// Keep failed endpoints visible so missing rows are clearly treated as errors.
 function renderErrorRow(apiKey, errorMessage) {
     const tableBody = document.getElementById('table-body');
     const row = tableBody.insertRow();
@@ -46,6 +49,21 @@ function renderErrorRow(apiKey, errorMessage) {
     errorCell.colSpan = TABLE_HEADERS_COUNT - 1;
 }
 
+// Render a successful result only after it has passed validation.
+function renderRateRow(apiInfo, rateData) {
+    const { compra, venta, fecha, variacion } = rateData;
+    const tableBody = document.getElementById('table-body');
+    const row = tableBody.insertRow();
+    createCell(row, apiInfo.key);
+    createCell(row, apiInfo.key === 'Tarjeta' ? '---' : compra);
+    createCell(row, venta);
+    createCell(row, fecha);
+
+    const variationCell = createCell(row, variacion);
+    variationCell.style.color = variacion.startsWith('-') ? 'red' : 'lightgreen';
+}
+
+// Treat upstream API responses as untrusted and accept only the fields we need.
 function getValidatedRateData(data) {
     if (!data || typeof data !== 'object' || Array.isArray(data)) {
         throw new Error('Invalid response format');
@@ -70,6 +88,7 @@ function getValidatedRateData(data) {
 }
 
 async function fetchRateData(apiInfo) {
+    // Abort slow requests so a single stalled endpoint does not block the whole refresh.
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
@@ -101,30 +120,20 @@ async function fetchRateData(apiInfo) {
     }
 }
 
-// Function to fetch data from an API and populate the table
-async function fetchDataAndPopulateTable(apiInfo) {
+// Normalize success and failure into one object shape so rendering can happen later.
+async function fetchRateResult(apiInfo) {
     try {
-        const { compra, venta, fecha, variacion } = await fetchRateData(apiInfo);
-
-        const tableBody = document.getElementById('table-body');
-        const row = tableBody.insertRow();
-        const cell1 = createCell(row, apiInfo.key);
-        const cell2 = createCell(row, (apiInfo.key == 'Tarjeta') ? '---' : compra);
-        const cell3 = createCell(row, venta);
-        const cell4 = createCell(row, fecha);
-        const cell5 = createCell(row, variacion);
-
-        cell5.style.color = variacion.startsWith('-') ? 'red' : 'lightgreen';
-        return true;
+        const rateData = await fetchRateData(apiInfo);
+        return { apiInfo, rateData, errorMessage: null };
     } catch (error) {
         console.error(`Error fetching data from API ${apiInfo.key}: ${error.message}`);
-        renderErrorRow(apiInfo.key, 'Error retrieving data');
-        return false;
+        return { apiInfo, rateData: null, errorMessage: 'Error retrieving data' };
     }
 }
 
-// Function to fetch data from all APIs and populate the table in a specific order
+// Fetch all rows in parallel, then render once in the intended display order.
 async function fetchDataAndPopulateAll() {
+    // Ignore timer ticks while a previous refresh is still running.
     if (refreshInProgress) {
         return;
     }
@@ -142,20 +151,28 @@ async function fetchDataAndPopulateAll() {
         const tableBody = document.getElementById('table-body');
         tableBody.innerHTML = '';
 
+        const orderedApiInfos = desiredOrder
+            .map(apiKey => apiUrls.find(api => api.key === apiKey))
+            .filter(Boolean);
+
+        // Promise.all preserves input order, so rendering still matches desiredOrder.
+        const results = await Promise.all(
+            orderedApiInfos.map(apiInfo => fetchRateResult(apiInfo))
+        );
+
         let successfulRequests = 0;
 
-        // Fetch data from each API in the desired order and populate the table
-        for (const apiKey of desiredOrder) {
-            const apiInfo = apiUrls.find(api => api.key === apiKey);
-            if (apiInfo) {
-                const didSucceed = await fetchDataAndPopulateTable(apiInfo);
-                if (didSucceed) {
-                    successfulRequests += 1;
-                }
+        // Populate the table only after every API call has finished.
+        for (const result of results) {
+            if (result.rateData) {
+                renderRateRow(result.apiInfo, result.rateData);
+                successfulRequests += 1;
+            } else {
+                renderErrorRow(result.apiInfo.key, result.errorMessage);
             }
         }
 
-        if (successfulRequests === desiredOrder.length) {
+        if (successfulRequests === orderedApiInfos.length) {
             setStatusMessage('');
         } else if (successfulRequests === 0) {
             setStatusMessage('No exchange rates could be updated at this time.', true);
@@ -167,8 +184,8 @@ async function fetchDataAndPopulateAll() {
     }
 }
 
-// Call the fetchDataAndPopulateAll function when the page loads
+// Load data once when the page opens.
 document.addEventListener('DOMContentLoaded', fetchDataAndPopulateAll);
 
-// Refresh the data every 15 minutes (900000 milliseconds)
+// Refresh the data every 15 minutes (900000 milliseconds).
 setInterval(fetchDataAndPopulateAll, 900000);
