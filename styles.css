@@ -9,6 +9,7 @@ body {
 }
 
 .status-message {
+    /* Reserve vertical space so the table does not jump when status text appears. */
     min-height: 1.5rem;
     margin: 1rem 0;
     color: lightgray;
@@ -56,6 +57,7 @@ tr:hover {
 }
 
 .row-error {
+    /* Match the error color used by the table-level status message. */
     color: #ff9b9b;
 }
 
