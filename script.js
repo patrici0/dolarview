@@ -49,6 +49,24 @@ function renderErrorRow(apiKey, errorMessage) {
     errorCell.colSpan = TABLE_HEADERS_COUNT - 1;
 }
 
+// The API returns percentages as strings, so normalize them before choosing a color.
+function getVariationColor(variacion) {
+    const normalizedVariation = variacion.replace('%', '').replace(',', '.').trim();
+    const numericVariation = Number(normalizedVariation);
+
+    if (!Number.isNaN(numericVariation)) {
+        if (numericVariation < 0) {
+            return 'red';
+        }
+
+        if (numericVariation === 0) {
+            return 'lightblue';
+        }
+    }
+
+    return 'lightgreen';
+}
+
 // Render a successful result only after it has passed validation.
 function renderRateRow(apiInfo, rateData) {
     const { compra, venta, fecha, variacion } = rateData;
@@ -60,7 +78,7 @@ function renderRateRow(apiInfo, rateData) {
     createCell(row, fecha);
 
     const variationCell = createCell(row, variacion);
-    variationCell.style.color = variacion.startsWith('-') ? 'red' : 'lightgreen';
+    variationCell.style.color = getVariationColor(variacion);
 }
 
 // Treat upstream API responses as untrusted and accept only the fields we need.
