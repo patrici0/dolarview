@@ -7,6 +7,7 @@ const apiUrls = [
     { key: 'Blue', value: 'https://mercados.ambito.com/dolar/informal/variacion' },
     { key: 'MEP', value: 'https://mercados.ambito.com/dolarrava/mep/variacion' },
     { key: 'CCL', value: 'https://mercados.ambito.com/dolarrava/cl/variacion' },
+    { key: 'Dolar Futuro', value: 'https://mercados.ambito.com/dolar/futuro/variacion' },
     { key: 'Cripto', value: 'https://mercados.ambito.com/dolarcripto/variacion' },
     { key: 'Tarjeta', value: 'https://mercados.ambito.com/dolarturista/variacion' },
     { key: 'Qatar', value: 'https://mercados.ambito.com/dolarqatar/variacion' },
@@ -160,7 +161,7 @@ async function fetchDataAndPopulateAll() {
 
     // Define the specific order in which you want to display the APIs
     // const desiredOrder = ['Oficial', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Qatar', 'Lujo'];
-    const desiredOrder = ['Oficial', 'Nacion', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Euro Oficial', 'Euro Blue'];
+    const desiredOrder = ['Oficial', 'Nacion', 'Blue', 'MEP', 'CCL', 'Cripto', 'Tarjeta', 'Dolar Futuro', 'Euro Oficial', 'Euro Blue'];
 
     try {
         setStatusMessage('Updating exchange rates...');
